@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festa Junina com a Pitang</title>
+    <!-- Link para a fonte Inter do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Link para o CDN do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos básicos para o corpo da página */
+        body {
+            font-family: 'Inter', sans-serif; /* Define a fonte Inter */
+            margin: 0; /* Remove margens padrão do corpo */
+            overflow: hidden; /* Oculta barras de rolagem caso elementos ultrapassem a tela */
+            height: 100vh; /* Altura total da viewport */
+            width: 100vw; /* Largura total da viewport */
+            display: flex; /* Usa flexbox para centralizar conteúdo principal (se houvesse) */
+            flex-direction: column; /* Para empilhar elementos verticalmente */
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Necessário para o posicionamento absoluto dos elementos de fundo */
+            background-color: #1a0a33; /* Cor de fundo principal: roxo escuro para simular o céu noturno */
+            color: white; /* Cor do texto padrão */
+        }
+
+        /* Contêiner para os elementos de fundo, como as pitangas */
+        .background-elements {
+            position: absolute; /* Posiciona o contêiner de fundo */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Geração das "pitangas" usando múltiplos gradientes radiais */
+            background-image:
+                /* Cada linha abaixo representa uma "pitanga" diferente, com cor, tamanho e posição aleatória */
+                radial-gradient(circle at 5% 15%, rgba(255, 69, 0, 0.7) 3px, transparent 4px), /* Vermelho alaranjado semi-transparente */
+                radial-gradient(circle at 90% 80%, rgba(255, 140, 0, 0.6) 4px, transparent 5px), /* Laranja escuro semi-transparente */
+                radial-gradient(circle at 20% 70%, rgba(255, 69, 0, 0.8) 5px, transparent 6px),
+                radial-gradient(circle at 75% 25%, rgba(255, 165, 0, 0.7) 3px, transparent 4px), /* Laranja vivo semi-transparente */
+                radial-gradient(circle at 40% 50%, rgba(255, 69, 0, 0.9) 6px, transparent 7px),
+                radial-gradient(circle at 15% 85%, rgba(255, 140, 0, 0.5) 4px, transparent 5px),
+                radial-gradient(circle at 60% 10%, rgba(255, 69, 0, 0.7) 3px, transparent 4px),
+                radial-gradient(circle at 30% 30%, rgba(255, 165, 0, 0.8) 5px, transparent 6px),
+                radial-gradient(circle at 85% 55%, rgba(255, 69, 0, 0.6) 4px, transparent 5px),
+                radial-gradient(circle at 50% 95%, rgba(255, 140, 0, 0.7) 3px, transparent 4px),
+                radial-gradient(circle at 10% 50%, rgba(255, 69, 0, 0.75) 4px, transparent 5px),
+                radial-gradient(circle at 70% 30%, rgba(255, 165, 0, 0.65) 3px, transparent 4px),
+                radial-gradient(circle at 35% 80%, rgba(255, 69, 0, 0.85) 5px, transparent 6px),
+                radial-gradient(circle at 65% 60%, rgba(255, 140, 0, 0.7) 4px, transparent 5px),
+                radial-gradient(circle at 25% 10%, rgba(255, 165, 0, 0.9) 5px, transparent 6px);
+            background-repeat: no-repeat; /* Evita a repetição dos gradientes */
+            background-size: 100% 100%; /* Garante que os gradientes cobrem toda a área */
+        }
+
+        /* Contêiner para as bandeirinhas */
+        .bandeirinhas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20%; /* Ocupa os 20% superiores da tela */
+            display: flex; /* Usa flexbox para distribuir as bandeirinhas */
+            justify-content: space-around; /* Espaçamento igual entre elas */
+            align-items: flex-start; /* Alinha no topo */
+            pointer-events: none; /* Permite que cliques passem por este elemento */
+            z-index: 10; /* Garante que as bandeirinhas fiquem sobre os outros elementos */
+        }
+
+        /* Estilo individual de cada bandeirinha */
+        .bandeirinha {
+            width: 8vw; /* Largura responsiva baseada na largura da viewport */
+            height: 10vw; /* Altura responsiva */
+            background-color: var(--color, #f00); /* Cor de fundo, com fallback vermelho */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Cria um formato triangular */
+            transform: translateY(0) rotate(var(--rotate, 0deg)); /* Para variações de rotação e flutuação */
+            animation: float 3s ease-in-out infinite var(--delay, 0s); /* Animação de flutuação */
+            border-radius: 5px; /* Bordas levemente arredondadas */
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)); /* Sombra para dar profundidade */
+        }
+
+        /* Animação de flutuação das bandeirinhas */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(var(--rotate, 0deg));
+            }
+            50% {
+                transform: translateY(-10px) rotate(var(--rotate, 0deg)); /* Sobe 10px */
+            }
+            100% {
+                transform: translateY(0) rotate(var(--rotate, 0deg));
+            }
+        }
+
+        /* Contêiner para a fogueira */
+        .fogueira-container {
+            position: absolute;
+            bottom: 0; /* Posiciona na parte inferior */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Ajusta a centralização horizontal */
+            width: 60vw; /* Largura responsiva */
+            max-width: 400px; /* Largura máxima para desktop */
+            height: 30vh; /* Altura responsiva */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            z-index: 5; /* Garante que a fogueira fique acima do fundo */
+        }
+
+        /* Base da fogueira (troncos) */
+        .fogueira-base {
+            width: 80%;
+            height: 20%;
+            background-color: #8B4513; /* Marrom para os troncos */
+            border-radius: 50%; /* Forma arredondada */
+            position: relative;
+            z-index: 1; /* Garante que a base fique abaixo das chamas */
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5)); /* Sombra para profundidade */
+            animation: pulse-base 2s infinite alternate; /* Animação de pulso */
+        }
+
+        /* Animação de pulso da base da fogueira */
+        @keyframes pulse-base {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); } /* Aumenta ligeiramente de tamanho */
+        }
+
+        /* Estilo genérico para as chamas da fogueira */
+        .fogueira-flame {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            bottom: 0;
+            left: 0;
+            border-radius: 50% 50% 0 0; /* Forma de chama */
+            filter: blur(15px); /* Suaviza as chamas */
+            transform-origin: bottom center; /* Ponto de origem da transformação no centro inferior */
+            animation: flame-flicker 1.5s infinite alternate; /* Animação de tremeluzir */
+            opacity: 0.8; /* Transparência inicial */
+            pointer-events: none; /* Permite que cliques passem */
+        }
+
+        /* Chama amarela */
+        .flame-yellow {
+            background: radial-gradient(circle at 50% 70%, #FFFF00 0%, #FFD700 50%, transparent 100%); /* Gradiente amarelo */
+            transform: scale(0.9) rotate(5deg); /* Escala e rotação ligeira */
+            animation-delay: 0s; /* Começa imediatamente */
+        }
+
+        /* Chama laranja */
+        .flame-orange {
+            background: radial-gradient(circle at 50% 70%, #FFA500 0%, #FF8C00 50%, transparent 100%); /* Gradiente laranja */
+            transform: scale(0.8) rotate(-5deg); /* Escala e rotação oposta */
+            animation-delay: 0.3s; /* Atraso para um efeito mais dinâmico */
+        }
+
+        /* Chama vermelha */
+        .flame-red {
+            background: radial-gradient(circle at 50% 70%, #FF4500 0%, #FF0000 50%, transparent 100%); /* Gradiente vermelho */
+            transform: scale(0.7) rotate(0deg); /* Escala menor */
+            animation-delay: 0.6s; /* Atraso maior */
+        }
+
+        /* Animação de tremeluzir das chamas */
+        @keyframes flame-flicker {
+            0% {
+                transform: scaleY(1) translateY(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scaleY(1.1) translateY(-5px); /* Estica um pouco e sobe */
+                opacity: 1; /* Fica mais opaca */
+            }
+            100% {
+                transform: scaleY(1) translateY(0);
+                opacity: 0.8;
+            }
+        }
+
+        /* Estilos para a área de interação com a fogueira dos desejos */
+        .wish-interaction {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centraliza o elemento */
+            z-index: 20; /* Garante que fique acima de outros elementos */
+            background-color: rgba(0, 0, 0, 0.6); /* Fundo semi-transparente */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            width: 80%; /* Largura responsiva */
+            max-width: 500px; /* Largura máxima */
+            backdrop-filter: blur(5px); /* Efeito de desfoque no fundo */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil */
+        }
+
+        /* Estilo para a área de texto do desejo */
+        .wish-input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #FFED66; /* Borda amarela */
+            background-color: #333; /* Fundo escuro */
+            color: #FFED66; /* Texto amarelo */
+            resize: vertical; /* Permite redimensionar verticalmente */
+            min-height: 80px;
+            font-size: 1rem;
+        }
+
+        /* Estilo para o botão de "Queimar Desejo" */
+        .wish-button {
+            background: linear-gradient(135deg, #FF4500, #FFA500); /* Gradiente de laranja para vermelho */
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4); /* Sombra colorida */
+            border: none;
+            position: relative; /* Para o efeito de brilho */
+            overflow: hidden; /* Oculta o brilho extra */
+        }
+
+        .wish-button:hover {
+            transform: translateY(-3px); /* Levanta um pouco no hover */
+            box-shadow: 0 8px 20px rgba(255, 69, 0, 0.6); /* Sombra mais intensa */
+        }
+
+        .wish-button:active {
+            transform: translateY(1px); /* Abaixa um pouco no clique */
+        }
+
+        /* Efeito de brilho no botão */
+        .wish-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background: rgba(255, 255, 255, 0.2); /* Brilho branco semi-transparente */
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+
+        .wish-button:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* Estilo para a área de resposta do Gemini */
+        .wish-response {
+            background-color: rgba(255, 255, 255, 0.1); /* Fundo claro semi-transparente */
+            padding: 1rem;
+            border-radius: 8px;
+            min-height: 50px;
+            width: 100%;
+            text-align: center;
+            font-style: italic;
+            color: #C7F2A4; /* Cor de texto verde claro */
+            overflow-y: auto; /* Adiciona scroll se o texto for muito longo */
+            max-height: 150px; /* Altura máxima */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; /* Começa invisível */
+            transform: translateY(10px); /* Começa ligeiramente abaixo */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .wish-response.show {
+            opacity: 1; /* Torna visível */
+            transform: translateY(0); /* Sobe para a posição final */
+        }
+
+        /* Estilo para o indicador de carregamento */
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #FFED66; /* Cor amarela para o topo */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite; /* Animação de rotação */
+            display: none; /* Esconde por padrão */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Ajustes responsivos para telas menores (smartphones) */
+        @media (max-width: 768px) {
+            .bandeirinha {
+                width: 12vw; /* Aumenta o tamanho das bandeirinhas em telas menores */
+                height: 15vw;
+            }
+            .fogueira-container {
+                width: 80vw; /* Aumenta a largura da fogueira em telas menores */
+            }
+            .wish-interaction {
+                width: 95%; /* Ocupa quase toda a largura em telas menores */
+                padding: 1rem;
+            }
+            .wish-input, .wish-response {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Div para os elementos de fundo, onde as pitangas são geradas via CSS -->
+    <div class="background-elements"></div>
+
+    <!-- Contêiner para as bandeirinhas flutuantes -->
+    <div class="bandeirinhas-container">
+        <!-- Cada div.bandeirinha representa uma flâmula com cores e rotações variadas -->
+        <div class="bandeirinha" style="--color: #FF6B6B; --rotate: -5deg; --delay: 0.1s;"></div>
+        <div class="bandeirinha" style="--color: #FFE66D; --rotate: 3deg; --delay: 0.3s;"></div>
+        <div class="bandeirinha" style="--color: #4ECDC4; --rotate: -2deg; --delay: 0.5s;"></div>
+        <div class="bandeirinha" style="--color: #C7F2A4; --rotate: 4deg; --delay: 0.2s;"></div>
+        <div class="bandeirinha" style="--color: #DA2C38; --rotate: -6deg; --delay: 0.4s;"></div>
+        <div class="bandeirinha" style="--color: #F8B195; --rotate: 1deg; --delay: 0.6s;"></div>
+        <div class="bandeirinha" style="--color: #FFED66; --rotate: -3deg; --delay: 0s;"></div>
+        <div class="bandeirinha" style="--color: #A2E8B9; --rotate: 2deg; --delay: 0.7s;"></div>
+    </div>
+
+    <!-- Contêiner para a fogueira -->
+    <div class="fogueira-container">
+        <!-- Camadas de chamas para um efeito mais realista -->
+        <div class="fogueira-flame flame-red"></div>
+        <div class="fogueira-flame flame-orange"></div>
+        <div class="fogueira-flame flame-yellow"></div>
+        <!-- Base da fogueira (troncos) -->
+        <div class="fogueira-base"></div>
+    </div>
+
+    <!-- Área de interação para a Fogueira dos Desejos (powered by Gemini) -->
+    <div class="wish-interaction">
+        <h2 class="text-2xl font-bold text-center text-orange-200">✨ Fogueira dos Desejos ✨</h2>
+        <p class="text-sm text-gray-300 text-center">Escreva seu desejo e deixe a fogueira junina lhe trazer uma mensagem!</p>
+        <textarea id="wishInput" class="wish-input" placeholder="Meu desejo é..."></textarea>
+        <button id="submitWishBtn" class="wish-button">Queimar Desejo ✨</button>
+        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="wishResponse" class="wish-response"></div>
+    </div>
+
+    <script>
+        // Função para lidar com o envio do desejo
+        async function handleWishSubmit() {
+            const wishInput = document.getElementById('wishInput');
+            const wishResponse = document.getElementById('wishResponse');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitWishBtn = document.getElementById('submitWishBtn');
+
+            const userWish = wishInput.value.trim(); // Obtém o desejo do usuário e remove espaços em branco
+            if (!userWish) {
+                // Se o campo estiver vazio, exibe uma mensagem de erro temporária
+                wishResponse.textContent = 'Por favor, escreva um desejo antes de enviar.';
+                wishResponse.classList.add('show');
+                setTimeout(() => wishResponse.classList.remove('show'), 3000); // Esconde após 3 segundos
+                return; // Sai da função
+            }
+
+            // Exibe o spinner de carregamento e desabilita o botão
+            loadingSpinner.style.display = 'block';
+            submitWishBtn.disabled = true;
+            submitWishBtn.textContent = 'Queimando...';
+            wishResponse.classList.remove('show'); // Esconde a resposta anterior
+            wishResponse.textContent = ''; // Limpa o conteúdo da resposta anterior
+
+            try {
+                // Prepara o histórico do chat com o prompt do usuário
+                let chatHistory = [];
+                const prompt = `Como uma fogueira de São João que realiza desejos, me dê uma mensagem curta (máximo 50 palavras), festiva e esperançosa, inspirada no seguinte desejo: "${userWish}". A mensagem deve ser alegre, usar linguagem típica de festa junina (caipira) e ser em português. Comece com "Ah, sô!" ou "Eita, sô!".`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                // Prepara o payload para a API do Gemini
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // A API key será fornecida pelo ambiente Canvas
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                // Faz a chamada à API do Gemini
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Converte a resposta para JSON
+                const result = await response.json();
+
+                // Verifica se a resposta contém o texto gerado
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    wishResponse.textContent = text; // Exibe o texto gerado
+                    wishResponse.classList.add('show'); // Mostra a resposta com animação
+                } else {
+                    wishResponse.textContent = 'Não foi possível gerar uma mensagem. Tente novamente!';
+                    wishResponse.classList.add('show');
+                    console.error('Estrutura de resposta inesperada da API Gemini:', result);
+                }
+            } catch (error) {
+                wishResponse.textContent = 'Ocorreu um erro ao conectar-se à fogueira. Tente mais tarde!';
+                wishResponse.classList.add('show');
+                console.error('Erro ao chamar a API Gemini:', error);
+            } finally {
+                // Esconde o spinner de carregamento e reabilita o botão
+                loadingSpinner.style.display = 'none';
+                submitWishBtn.disabled = false;
+                submitWishBtn.textContent = 'Queimar Desejo ✨';
+                wishInput.value = ''; // Limpa o campo de entrada
+            }
+        }
+
+        // Adiciona o event listener ao botão quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitWishBtn = document.getElementById('submitWishBtn');
+            if (submitWishBtn) {
+                submitWishBtn.addEventListener('click', handleWishSubmit);
+            } else {
+                console.error("Botão 'submitWishBtn' não encontrado.");
+            }
+        });
+    </script>
+</body>
+</html>
